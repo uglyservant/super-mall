@@ -120,7 +120,7 @@
   import HomeRecommend from "./child-components/HomeRecommend";
   import WeeklyFashion from "./child-components/WeeklyFashion";
 
-  import {getHomeMultiData} from "../../network/home";
+  import {getHomeMultiData, getHomeGoods} from "../../network/home";
 
   export default {
     name: "Home",
@@ -135,7 +135,12 @@
     data() {
       return {
         banner: [],
-        recommend: []
+        recommend: [],
+        goods: {
+          "pop": {page: 0, list:[]},
+          "new": {page: 0, list:[]},
+          "sell": {page: 0, list:[]}
+        }
       }
     },
     created() {
@@ -144,6 +149,10 @@
         console.log(result);
         this.banner = result.data.data.banner.list;
         this.recommend = result.data.data.recommend.list;
+      });
+
+      getHomeGoods("pop", 1).then(result => {
+        console.log(result);
       })
     }
   }
