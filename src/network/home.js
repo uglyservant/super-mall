@@ -11,9 +11,6 @@ export function getHomeGoods(type, page) {
   return request({
     url: "/home/data",
     method: "get",
-    params: {
-      type,
-      page
-    }
+    params: {type, page}
   })
 }
