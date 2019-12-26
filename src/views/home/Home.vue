@@ -145,15 +145,30 @@
     },
     created() {
       // 1. 请求多个数据
-      getHomeMultiData().then(result => {
-        console.log(result);
-        this.banner = result.data.data.banner.list;
-        this.recommend = result.data.data.recommend.list;
-      });
+      this.getHomeMultiData();
 
-      getHomeGoods("pop", 1).then(result => {
-        console.log(result);
-      })
+      // 2. 请求商品信息
+      this.getHomeGoods("pop");
+      this.getHomeGoods("new");
+      this.getHomeGoods("sell");
+    },
+    methods: {
+      getHomeMultiData() {
+        getHomeMultiData().then(result => {
+          console.log(result);
+          this.banner = result.data.data.banner.list;
+          this.recommend = result.data.data.recommend.list;
+        });
+      },
+      getHomeGoods(type) {
+        const page = ++this.goods[type].page;
+        console.log(page);
+        getHomeGoods(type, page).then(result => {
+          let goodList = result.data.data.list;
+          console.log(goodList);
+          this.goods[type].list.push(...goodList);
+        })
+      }
     }
   }
 </script>
