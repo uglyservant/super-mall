@@ -1,13 +1,15 @@
 <template>
   <div id="home">
     <navigation-bar class="home-navigation-bar"><div slot="center">购物街</div></navigation-bar>
-    <scroll class="wrapper">
+    <scroll class="wrapper" ref="scroll" :probe-type="3" @getPosition="getPosition">
       <home-swiper :banner="banner"/>
       <home-recommend :recommend="recommend"/>
       <weekly-fashion/>
       <tab-control :titles="tabControlTitles" @tabClick="tabClick"/>
       <good-list :goods="showGoods"/>
     </scroll>
+    <!--监听组件加native修饰符-->
+    <back-top v-if="showBackTop" @click.native="backTopClick"/>
   </div>
 </template>
 
@@ -16,6 +18,7 @@
 
   import TabControl from "../../components/content/tab-control/TabControl";
   import GoodList from "../../components/content/goods/GoodList";
+  import BackTop from "../../components/content/BackTop";
 
   import Scroll from "../../components/scroll/Scroll";
 
@@ -32,6 +35,7 @@
 
       TabControl,
       GoodList,
+      BackTop,
 
       Scroll,
 
@@ -54,7 +58,8 @@
           "pop": {page: 0, list:[]},
           "new": {page: 0, list:[]},
           "sell": {page: 0, list:[]}
-        }
+        },
+        showBackTop: false
       }
     },
     created() {
@@ -101,6 +106,15 @@
           case 2:
             this.tabControlCurrentType = 'sell';
         }
+      },
+      /**
+       * 返回顶部
+       */
+      backTopClick() {
+        this.$refs.scroll.scrollTo(0, 0);
+      },
+      getPosition(position) {
+        this.showBackTop = position.y < -500;
       }
     }
   }
