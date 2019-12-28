@@ -1,13 +1,13 @@
 <template>
   <div id="home">
-    <navigation-bar class="home-navigation-bar">
-      <div slot="center">购物街</div>
-    </navigation-bar>
-    <home-swiper :banner="banner"/>
-    <home-recommend :recommend="recommend"/>
-    <weekly-fashion/>
-    <tab-control :titles="tabControlTitles" @tabClick="tabClick"/>
-    <good-list :goods="showGoods"/>
+    <navigation-bar class="home-navigation-bar"><div slot="center">购物街</div></navigation-bar>
+    <scroll class="wrapper">
+      <home-swiper :banner="banner"/>
+      <home-recommend :recommend="recommend"/>
+      <weekly-fashion/>
+      <tab-control :titles="tabControlTitles" @tabClick="tabClick"/>
+      <good-list :goods="showGoods"/>
+    </scroll>
   </div>
 </template>
 
@@ -15,7 +15,9 @@
   import NavigationBar from "../../components/common/navigation-bar/NavigationBar";
 
   import TabControl from "../../components/content/tab-control/TabControl";
-  import GoodList from "@/components/content/goods/GoodList";
+  import GoodList from "../../components/content/goods/GoodList";
+
+  import Scroll from "../../components/scroll/Scroll";
 
   import HomeSwiper from "./child-components/HomeSwiper";
   import HomeRecommend from "./child-components/HomeRecommend";
@@ -30,6 +32,8 @@
 
       TabControl,
       GoodList,
+
+      Scroll,
 
       HomeSwiper,
       HomeRecommend,
@@ -114,5 +118,10 @@
     left: 0;
     right: 0;
     z-index: 9;
+  }
+
+  .wrapper {
+    height: calc(100vh - 93px);
+    overflow: hidden;
   }
 </style>
