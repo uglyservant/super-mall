@@ -1,7 +1,8 @@
 <template>
   <div id="home">
     <navigation-bar class="home-navigation-bar"><div slot="center">购物街</div></navigation-bar>
-    <scroll class="wrapper" ref="scroll" :probe-type="3" @getPosition="getPosition">
+    <scroll class="wrapper" ref="scroll" :probe-type="3" :pull-up-load="true"
+            @getPosition="getPosition" @pullingUp="loadMore">
       <home-swiper :banner="banner"/>
       <home-recommend :recommend="recommend"/>
       <weekly-fashion/>
@@ -115,6 +116,12 @@
       },
       getPosition(position) {
         this.showBackTop = position.y < -500;
+      },
+      /**
+       * 上拉加载更多
+       */
+      loadMore() {
+        this.getHomeGoods(this.tabControlCurrentType);
       }
     }
   }

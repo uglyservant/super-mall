@@ -15,7 +15,7 @@
         type: Number,
         default: 0
       },
-
+      pullUpLoad: false
     },
     data() {
       return {
@@ -23,10 +23,22 @@
       }
     },
     mounted() {
-      this.scroll = new BScroll(this.$refs.wrapper, {click: true, probeType: this.probeType});
+      // 1. 创建BScroll对象
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        click: true,
+        probeType: this.probeType,
+        pullUpLoad: this.pullUpLoad
+      });
+
+      // 2. 监听滚动的位置
       this.scroll.scrollTo(0, 0);
       this.scroll.on("scroll", (position) => {
         this.$emit("getPosition", position);
+      });
+
+      // 3. 监听上拉事件
+      this.scroll.on("pullingUp", () => {
+        this.$emit("pullingUp");
       })
     },
     methods: {
