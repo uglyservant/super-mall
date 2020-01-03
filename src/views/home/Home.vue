@@ -90,6 +90,7 @@
           let goodList = result.data.data.list;
           // console.log(goodList);
           this.goods[type].list.push(...goodList);
+          this.$refs.scroll.finishPullUp();
         })
       },
       /**
