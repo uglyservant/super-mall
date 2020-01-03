@@ -73,11 +73,24 @@
       this.getHomeGoods("sell");
     },
     mounted() {
+      const refresh = this.debounce(this.$refs.scroll.refresh, 500);
       this.$bus.$on("goodImageLoad", () => {
-        this.$refs.scroll.refresh();
+        refresh();
       });
     },
     methods: {
+      /***
+       * 防抖函数
+       */
+      debounce(func, delay) {
+        let timer = null;
+        return function (...args) {
+          if (timer) clearTimeout(timer);
+          timer = setTimeout(() => {
+            func.apply(this, args);
+          }, delay)
+        }
+      },
       /**
        * 网络请求
        */

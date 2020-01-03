@@ -49,6 +49,7 @@
         this.scroll.finishPullUp();
       },
       refresh() {
+        console.log("---");
         this.scroll.refresh();
       }
     }
