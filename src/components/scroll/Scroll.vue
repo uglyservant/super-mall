@@ -49,7 +49,7 @@
         this.scroll.finishPullUp();
       },
       refresh() {
-        console.log("---");
+        console.log("--- refresh ---");
         this.scroll.refresh();
       }
     }

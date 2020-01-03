@@ -3,10 +3,10 @@
     <navigation-bar class="home-navigation-bar"><div slot="center">购物街</div></navigation-bar>
     <scroll class="wrapper" ref="scroll" :probe-type="3" :pull-up-load="true"
             @getPosition="getPosition" @pullingUp="loadMore">
-      <home-swiper :banner="banner"/>
+      <home-swiper :banner="banner" @swiperLoad="swiperLoad"/>
       <home-recommend :recommend="recommend"/>
       <weekly-fashion/>
-      <tab-control :titles="tabControlTitles" @tabClick="tabClick"/>
+      <tab-control ref="tabControl" :titles="tabControlTitles" @tabClick="tabClick" :class="{fixed: tabControlFixed}"/>
       <good-list :goods="showGoods"/>
     </scroll>
     <!--监听组件加native修饰符-->
@@ -15,19 +15,21 @@
 </template>
 
 <script>
-  import NavigationBar from "../../components/common/navigation-bar/NavigationBar";
+  import NavigationBar from "@/components/common/navigation-bar/NavigationBar";
 
-  import TabControl from "../../components/content/tab-control/TabControl";
-  import GoodList from "../../components/content/goods/GoodList";
-  import BackTop from "../../components/content/BackTop";
+  import TabControl from "@/components/content/tab-control/TabControl";
+  import GoodList from "@/components/content/goods/GoodList";
+  import BackTop from "@/components/content/BackTop";
 
-  import Scroll from "../../components/scroll/Scroll";
+  import Scroll from "@/components/scroll/Scroll";
 
-  import HomeSwiper from "./child-components/HomeSwiper";
-  import HomeRecommend from "./child-components/HomeRecommend";
-  import WeeklyFashion from "./child-components/WeeklyFashion";
+  import HomeSwiper from "@/views/home/child-components/HomeSwiper";
 
-  import {getHomeMultiData, getHomeGoods} from "../../network/home";
+  import HomeRecommend from "@/views/home/child-components/HomeRecommend";
+  import WeeklyFashion from "@/views/home/child-components/WeeklyFashion";
+
+  import {getHomeMultiData, getHomeGoods} from "@/network/home";
+  import {debounce} from "@/common/utils";
 
   export default {
     name: "Home",
@@ -55,12 +57,14 @@
         recommend: [],
         tabControlTitles: ['流行', '新款', '精选'],
         tabControlCurrentType: "pop",
+        tabOffsetTop: 0,
         goods: {
           "pop": {page: 0, list:[]},
           "new": {page: 0, list:[]},
           "sell": {page: 0, list:[]}
         },
-        showBackTop: false
+        showBackTop: false,
+        tabControlFixed: false
       }
     },
     created() {
@@ -73,24 +77,12 @@
       this.getHomeGoods("sell");
     },
     mounted() {
-      const refresh = this.debounce(this.$refs.scroll.refresh, 500);
+      const refresh = debounce(this.$refs.scroll.refresh, 500);
       this.$bus.$on("goodImageLoad", () => {
         refresh();
       });
     },
     methods: {
-      /***
-       * 防抖函数
-       */
-      debounce(func, delay) {
-        let timer = null;
-        return function (...args) {
-          if (timer) clearTimeout(timer);
-          timer = setTimeout(() => {
-            func.apply(this, args);
-          }, delay)
-        }
-      },
       /**
        * 网络请求
        */
@@ -135,12 +127,18 @@
       },
       getPosition(position) {
         this.showBackTop = position.y < -500;
+        this.tabControlFixed = position.y <= (-this.tabOffsetTop);
       },
       /**
        * 上拉加载更多
        */
       loadMore() {
         this.getHomeGoods(this.tabControlCurrentType);
+      },
+      swiperLoad() {
+        // 所有组件都有一个属性$el: 用于获取组件中的元素
+        console.log(this.$refs.tabControl.$el.offsetTop);
+        this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop;
       }
     }
   }
@@ -163,5 +161,12 @@
   .wrapper {
     height: calc(100vh - 93px);
     overflow: hidden;
+  }
+
+  .fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 44px;
   }
 </style>
