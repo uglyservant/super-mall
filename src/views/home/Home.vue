@@ -72,6 +72,11 @@
       this.getHomeGoods("new");
       this.getHomeGoods("sell");
     },
+    mounted() {
+      this.$bus.$on("goodImageLoad", () => {
+        this.$refs.scroll.refresh();
+      });
+    },
     methods: {
       /**
        * 网络请求
