@@ -1,12 +1,14 @@
 <template>
   <div id="home">
     <navigation-bar class="home-navigation-bar"><div slot="center">购物街</div></navigation-bar>
+    <tab-control :titles="tabControlTitles" @tabClick="tabClick" class="fixed"
+                 v-show="tabControlFixed" ref="tabControlFixed"/>
     <scroll class="wrapper" ref="scroll" :probe-type="3" :pull-up-load="true"
             @getPosition="getPosition" @pullingUp="loadMore">
       <home-swiper :banner="banner" @swiperLoad="swiperLoad"/>
       <home-recommend :recommend="recommend"/>
       <weekly-fashion/>
-      <tab-control ref="tabControl" :titles="tabControlTitles" @tabClick="tabClick" :class="{fixed: tabControlFixed}"/>
+      <tab-control ref="tabControl" :titles="tabControlTitles" @tabClick="tabClick"/>
       <good-list :goods="showGoods"/>
     </scroll>
     <!--监听组件加native修饰符-->
@@ -118,6 +120,8 @@
           case 2:
             this.tabControlCurrentType = 'sell';
         }
+        this.$refs.tabControl.currentIndex = index;
+        this.$refs.tabControlFixed.currentIndex = index;
       },
       /**
        * 返回顶部
@@ -127,7 +131,7 @@
       },
       getPosition(position) {
         this.showBackTop = position.y < -500;
-        this.tabControlFixed = position.y <= (-this.tabOffsetTop);
+        this.tabControlFixed = position.y < -this.tabOffsetTop;
       },
       /**
        * 上拉加载更多
@@ -137,8 +141,11 @@
       },
       swiperLoad() {
         // 所有组件都有一个属性$el: 用于获取组件中的元素
-        console.log(this.$refs.tabControl.$el.offsetTop);
-        this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop;
+        // console.log(this.$refs.tabControl.getBoundingClientRect().top);
+        let offsetTop = this.$refs.tabControl.$el.offsetTop;
+        let offsetHeight = this.$refs.tabControl.$el.offsetHeight;
+        console.log(offsetTop - offsetHeight - 3.7);
+        this.tabOffsetTop = offsetTop - offsetHeight - 3.7;
       }
     }
   }
@@ -146,16 +153,16 @@
 
 <style scoped>
   #home {
-    padding-top: 44px;
+    /*padding-top: 44px;*/
   }
   .home-navigation-bar {
     background-color: var(--color-tint);
     color: #ffffff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 9;
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*z-index: 9;*/
   }
 
   .wrapper {
@@ -168,5 +175,6 @@
     left: 0;
     right: 0;
     top: 44px;
+    z-index: 9;
   }
 </style>

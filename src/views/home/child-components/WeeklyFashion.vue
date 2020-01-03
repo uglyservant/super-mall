@@ -13,7 +13,13 @@
 </script>
 
 <style scoped>
-  .feature img {
+  .feature a {
+    display: block;
     width: 100%;
+    background-color: white;
+  }
+  .feature a img {
+    width: 100%;
+    background-color: white;
   }
 </style>
