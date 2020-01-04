@@ -86,11 +86,13 @@
       });
     },
     activated() {
-      this.$refs.scroll.scrollTo(0, this.scrollY, 0);
+      console.log("activated" + this.scrollY);
       this.$refs.scroll.refresh();
+      this.$refs.scroll.scrollTo(0, this.scrollY, 0);
     },
     deactivated() {
       this.scrollY = this.$refs.scroll.getScrollY();
+      console.log("deactivated" + this.scrollY);
     },
     methods: {
       /**

@@ -1,5 +1,5 @@
 <template>
-  <div class="good">
+  <div class="good" @click="itemClick">
     <img :src="goodObject.show.img" alt="" @load="imageLoad">
     <div class="good-info">
       <p>{{goodObject.title}}</p>
@@ -23,6 +23,9 @@
     methods: {
       imageLoad() {
         this.$bus.$emit("goodImageLoad");
+      },
+      itemClick() {
+        this.$router.push("/good-detail/" + this.goodObject.iid);
       }
     }
   }

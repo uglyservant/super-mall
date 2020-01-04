@@ -1,10 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-const Home = () => import("../views/home/Home");
-const Category = () => import("../views/category/Category");
-const ShoppingCart = () => import("../views/shopping-cart/ShoppingCart");
-const Profile = () => import("../views/profile/Profile");
+const Home = () => import("@/views/home/Home");
+const Category = () => import("@/views/category/Category");
+const ShoppingCart = () => import("@/views/shopping-cart/ShoppingCart");
+const Profile = () => import("@/views/profile/Profile");
+const GoodDetail = () => import("@/views/detail/GoodDetail");
 
 // 1.安装插件
 Vue.use(VueRouter);
@@ -30,6 +31,10 @@ const routes = [
   {
     path: "/profile",
     component: Profile
+  },
+  {
+    path: "/good-detail/:iid",
+    component: GoodDetail
   }
 ];
 
