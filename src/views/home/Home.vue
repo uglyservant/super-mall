@@ -60,6 +60,7 @@
         tabControlTitles: ['流行', '新款', '精选'],
         tabControlCurrentType: "pop",
         tabOffsetTop: 0,
+        scrollY: 0,
         goods: {
           "pop": {page: 0, list:[]},
           "new": {page: 0, list:[]},
@@ -83,6 +84,13 @@
       this.$bus.$on("goodImageLoad", () => {
         refresh();
       });
+    },
+    activated() {
+      this.$refs.scroll.scrollTo(0, this.scrollY, 0);
+      this.$refs.scroll.refresh();
+    },
+    deactivated() {
+      this.scrollY = this.$refs.scroll.getScrollY();
     },
     methods: {
       /**
